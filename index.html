@@ -1,160 +1,57 @@
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap');
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Biodata Singkat — Elviana</title>
+  <style>
+    :root{--bg:#f6f7fb;--card:#ffffff;--muted:#6b7280;--accent:#2563eb}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); margin:0; padding:40px; display:flex; align-items:center; justify-content:center; min-height:100vh}
+    .card{width:360px; background:var(--card); border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); padding:20px}
+    .head{display:flex; gap:16px; align-items:center}
+    .avatar{width:72px; height:72px; border-radius:10px; background:linear-gradient(135deg,#e2e8f0,#c7d2fe); display:flex; align-items:center; justify-content:center; font-weight:700; color:#0f172a}
+    h1{font-size:18px;margin:0}
+    p.role{margin:2px 0 0;color:var(--muted);font-size:13px}
+    .info{margin-top:14px; display:grid; gap:8px}
+    .row{display:flex; justify-content:space-between; font-size:14px}
+    .label{color:var(--muted); font-size:12px}
+    .actions{display:flex; gap:8px; margin-top:14px}
+    .btn{flex:1;padding:8px 10px;border-radius:8px;text-align:center;text-decoration:none;font-weight:600;background:linear-gradient(90deg,var(--accent),#1e40af);color:white}
+    .small{font-size:12px;color:var(--muted)}
+    footer{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
+    @media (max-width:420px){body{padding:18px}.card{width:100%}}
+  </style>
+</head>
+<body>
+  <article class="card">
+    <header class="head">
+      <div class="avatar">E</div>
+      <div>
+        <h1>Elviana</h1>
+        <p class="role">Mahasiswa Fisika Murni — FMIPA</p>
+        <p class="small">Semester 5</p>
+      </div>
+    </header>
 
-/* Umum */
-body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: #111; /* hitam pekat */
-  color: #eee; /* teks abu terang */
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
-}
+    <section class="info" aria-label="informasi pribadi">
+      <div class="row"><div class="label">NIM</div><div>H021231006</div></div>
+      <div class="row"><div class="label">Program Studi</div><div>Fisika Murni</div></div>
+      <div class="row"><div class="label">Fakultas</div><div>FMIPA</div></div>
+      <div class="row"><div class="label">Alamat</div><div>Jl. Towerkanjovank Lr.9 No.1 Tamalanrea Indah</div></div>
+      <div class="row"><div class="label">No. WA</div><div>085244044389</div></div>
+      <div class="row"><div class="label">Email</div><div>eaelviana@gmail.com</div></div>
+    </section>
 
-/* Header */
-header {
-  background-color: #000;
-  color: #f5f5f5;
-  text-align: center;
-  padding: 40px 20px;
-}
+    <div class="actions">
+      <a class="btn" href="mailto:eaelviana@gmail.com">Kirim Email</a>
+      <a class="btn" href="tel:+6285244044389">Telepon/WA</a>
+    </div>
 
-header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  margin: 0;
-}
+    <footer>
+      <div class="small">Biodata ini dibuat dalam HTML. Simpan file ini sebagai <code>biodata-elviana.html</code>.</div>
+    </footer>
+  </article>
+</body>
+</html>
 
-nav {
-  margin-top: 15px;
-}
-
-nav a {
-  color: #f5f5f5;
-  text-decoration: none;
-  margin: 0 15px;
-  font-weight: 600;
-  transition: color 0.3s;
-}
-
-nav a:hover {
-  color: #cda45e; /* warna emas */
-}
-
-/* Section kategori */
-.kategori-header {
-  text-align: center;
-  padding: 50px 20px;
-  background: linear-gradient(to right, #000, #222);
-}
-
-.kategori-header h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #cda45e;
-}
-
-.kategori-header p {
-  font-size: 1.2rem;
-  color: #bbb;
-}
-
-/* Artikel */
-.article-list {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
-.article-list article {
-  background-color: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  margin-bottom: 25px;
-  overflow: hidden;
-  transition: transform 0.3s;
-}
-
-.article-list article:hover {
-  transform: translateY(-5px);
-}
-
-.article-list img {
-  width: 100%;
-  display: block;
-}
-
-.article-list h3 {
-  font-family: 'Playfair Display', serif;
-  color: #fff;
-  padding: 15px 20px 5px;
-}
-
-.article-list p {
-  color: #aaa;
-  padding: 0 20px 15px;
-}
-
-.article-list small {
-  display: block;
-  padding: 0 20px 15px;
-  font-size: 0.85rem;
-  color: #777;
-}
-
-/* Footer */
-footer {
-  background-color: #000;
-  text-align: center;
-  color: #777;
-  padding: 20px;
-  font-size: 0.9rem;
-}
-
-/* === Tambahan style dark theme museum vibes === */
-
-/* Atur tampilan body (halaman utama) */
-body {
-  background-color: #111;   /* warna hitam gelap */
-  color: #f5f5f5;           /* teks putih lembut */
-  font-family: 'Georgia', serif;
-  margin: 0;
-  padding: 20px;
-}
-
-/* Atur judul */
-h1, h2 {
-  color: #e0aaff; /* ungu pastel */
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-/* Atur link navigasi */
-nav a {
-  color: #ff9800;
-  text-decoration: none;
-  margin-right: 15px;
-  font-weight: bold;
-}
-
-nav a:hover {
-  text-decoration: underline;
-  color: #ffc107;
-}
-
-/* Atur footer */
-footer {
-  margin-top: 50px;
-  font-size: 14px;
-  text-align: center;
-  color: #bbb;
-}
-
-header {
-  background: url('saturnus.webp') no-repeat center center;
-  background-size: cover;
-  color: white;
-  padding: 40px;
-  text-align: center;
-}
