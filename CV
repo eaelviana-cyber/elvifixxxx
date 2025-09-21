@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Elviana</title>
+</head>
+<body>
+    <h1>Elviana</h1>
+    <img src="./foto.jpg" alt="Foto Elviana" width="150px">
+
+    <h3>Biodata</h3>
+    <p>Tempat, Tanggal Lahir: Tono, 05 Desember 2004</p>
+    <p>Jenis Kelamin: Perempuan</p>
+    <p>Agama: Islam</p>
+    <p>Email: eaelviana@gmail.com</p>
+    <p>No. WA: 085244044389</p>
+    <p>Alamat: Jl. Towerkanjovank Lr.9 No.1 Tamalanrea Indah</p>
+
+    <h2>Ringkasan</h2>
+    <p>Saya adalah mahasiswi Fisika yang berdedikasi, aktif berorganisasi, dan memiliki minat pada komputasi serta fisika murni. Memiliki keterampilan komunikasi, kepemimpinan, dan manajemen acara yang baik.</p>
+
+    <h2>Pendidikan</h2>
+    <ul>
+        <li><strong>S1 Fisika, Universitas Hasanuddin</strong> (2023 – Sekarang)</li>
+        <li><strong>SMAN 24 Bone</strong> (2020 – 2023)</li>
+        <li><strong>SMPN 1 Dua Boccoe</strong> (2017 – 2020)</li>
+        <li><strong>SD Inpres 5/81 Pattiro</strong> (2011 – 2017)</li>
+    </ul>
+
+    <h2>Pengalaman Organisasi</h2>
+    <ul>
+        <li><strong>PMII Komisariat Universitas Hasanuddin</strong> (2023 – Sekarang)</li>
+        <li><strong>UKM Seni Tari Universitas Hasanuddin</strong> (2023 – Sekarang)</li>
+        <li><strong>HIMAFI FMIPA Universitas Hasanuddin</strong> (2023 – Sekarang)</li>
+        <li><strong>MPK SMAN 24 Bone</strong> (2022 – 2023)</li>
+        <li><strong>Koordinator Divisi Seni Islam ROHIS SMAN 24 Bone</strong> (2021 – 2022)</li>
+        <li><strong>Provos Putri PKS SMAN 24 Bone</strong> (2021 – 2022)</li>
+        <li><strong>Sekretaris OSIS SMAN 24 Bone</strong> (2021 – 2022)</li>
+    </ul>
+
+    <h2>Keterampilan</h2>
+    <ul>
+        <li>Microsoft Office ⭐⭐⭐⭐</li>
+        <li>Pemrograman Python Dasar ⭐⭐⭐</li>
+        <li>Public Speaking & Leadership ⭐⭐⭐⭐</li>
+        <li>Organisasi & Manajemen Acara ⭐⭐⭐⭐</li>
+    </ul>
+
+    <h2>Hobi & Minat</h2>
+    <ul>
+        <li>Belajar Pemrograman</li>
+        <li>Menari</li>
+        <li>Membaca Buku Sains</li>
+        <li>Menyanyi</li>
+    </ul>
+</body>
+</html>
