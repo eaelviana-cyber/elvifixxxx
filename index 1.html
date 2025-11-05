@@ -1,0 +1,326 @@
+/*
+README: Web Laboratorium - Starter (Single-file React component)
+
+Cara pakai:
+1. Buat project React (Vite recommended):
+   npm create vite@latest web-laboratorium -- --template react
+   cd web-laboratorium
+   npm install
+
+2. Pasang Tailwind (opsional tapi disarankan):
+   npm install -D tailwindcss postcss autoprefixer
+   npx tailwindcss init -p
+   // tambahkan content di tailwind.config.js dan @tailwind directives di src/index.css
+
+3. Ganti isi src/App.jsx dengan komponen ini, lalu jalankan:
+   npm run dev
+
+Fitur yang ada di starter:
+- Halaman beranda with hero
+- Daftar eksperimen / praktikum
+- Detail eksperimen modal
+- Form pemesanan slot praktikum (disimpan di localStorage)
+- Halaman admin (sederhana) untuk menambah eksperimen (disimpan di localStorage)
+
+Catatan: Ini adalah starter single-file untuk cepat prototyping. Untuk production,
+pecah menjadi beberapa file komponen, tambahkan validasi backend, otentikasi, dan
+penyimpanan di server (Firestore/REST API/etc.).
+*/
+
+import React, { useEffect, useState } from "react";
+
+export default function App() {
+  // sample data default
+  const defaultExperiments = [
+    {
+      id: "exp-1",
+      title: "Kalibrasi Sensor Suhu",
+      summary: "Mengukur respon sensor suhu terhadap perubahan temperatur.",
+      duration: "2 jam",
+      capacity: 6,
+      equipment: ["Thermometer", "Data Logger", "Sumber Panas"],
+    },
+    {
+      id: "exp-2",
+      title: "Spektroskopi Serapan",
+      summary: "Analisis spektrum serapan larutan menggunakan spektrofotometer.",
+      duration: "3 jam",
+      capacity: 4,
+      equipment: ["Spektrofotometer", "Kuarsa Cuvette"],
+    },
+  ];
+
+  const [experiments, setExperiments] = useState(() => {
+    try {
+      const raw = localStorage.getItem("lab_experiments_v1");
+      return raw ? JSON.parse(raw) : defaultExperiments;
+    } catch (e) {
+      return defaultExperiments;
+    }
+  });
+
+  const [selected, setSelected] = useState(null);
+  const [bookings, setBookings] = useState(() => {
+    try {
+      const raw = localStorage.getItem("lab_bookings_v1");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // admin mode toggle (no auth in starter)
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("lab_experiments_v1", JSON.stringify(experiments));
+  }, [experiments]);
+
+  useEffect(() => {
+    localStorage.setItem("lab_bookings_v1", JSON.stringify(bookings));
+  }, [bookings]);
+
+  function addBooking(expId, name, date, slot, notes) {
+    const id = `bk-${Date.now()}`;
+    const newBooking = { id, expId, name, date, slot, notes, createdAt: new Date().toISOString() };
+    setBookings((s) => [newBooking, ...s]);
+    alert("Booking berhasil disimpan (localStorage). Untuk deployment, hubungkan ke backend.");
+  }
+
+  function addExperiment({ title, summary, duration, capacity, equipment }) {
+    const id = `exp-${Date.now()}`;
+    setExperiments((s) => [
+      ...s,
+      { id, title, summary, duration, capacity: Number(capacity), equipment: equipment.split(",").map((x) => x.trim()) },
+    ]);
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">Lab</div>
+            <div>
+              <h1 className="font-semibold">Web Laboratorium</h1>
+              <p className="text-xs text-gray-500">Portal praktikum & reservasi</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="text-sm px-3 py-1 rounded-md border" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Home</button>
+            <button className="text-sm px-3 py-1 rounded-md border" onClick={() => document.getElementById('experiments').scrollIntoView({behavior:'smooth'})}>Praktikum</button>
+            <button className="text-sm px-3 py-1 rounded-md border" onClick={() => document.getElementById('contact').scrollIntoView({behavior:'smooth'})}>Kontak</button>
+            <button className="text-sm px-3 py-1 rounded-md bg-indigo-600 text-white" onClick={() => setIsAdmin((s) => !s)}>{isAdmin ? 'Keluar Admin' : 'Masuk Admin'}</button>
+          </div>
+        </div>
+      </nav>
+
+      <header className="bg-gradient-to-r from-sky-50 to-indigo-50 py-12">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-1">
+            <h2 className="text-3xl md:text-4xl font-extrabold">Selamat datang di Web Laboratorium</h2>
+            <p className="mt-4 text-gray-600">Kelola eksperimen, lihat detail alat, dan pesan slot praktikum secara cepat.</p>
+            <div className="mt-6 flex gap-3">
+              <a href="#experiments" className="px-4 py-2 bg-indigo-600 text-white rounded-md">Lihat Praktikum</a>
+              <a href="#contact" className="px-4 py-2 border rounded-md">Hubungi Admin</a>
+            </div>
+          </div>
+          <div className="w-full md:w-1/3 bg-white p-4 rounded-lg shadow-sm">
+            <h3 className="font-semibold">Ringkasan Booking Hari Ini</h3>
+            <p className="text-sm text-gray-500 mt-1">Total booking tersimpan: <strong>{bookings.length}</strong></p>
+            <ul className="mt-3 text-sm space-y-2 max-h-40 overflow-auto">
+              {bookings.slice(0,5).map(b => (
+                <li key={b.id} className="text-xs bg-gray-100 p-2 rounded">{b.name} — {b.date} ({b.slot})</li>
+              ))}
+              {bookings.length===0 && <li className="text-xs text-gray-400">Belum ada booking</li>}
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-4 py-8">
+        <section id="experiments">
+          <h3 className="text-2xl font-semibold">Daftar Praktikum</h3>
+          <p className="text-sm text-gray-500">Pilih praktikum untuk melihat detail dan memesan slot.</p>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {experiments.map((exp) => (
+              <article key={exp.id} className="bg-white p-4 rounded shadow-sm">
+                <h4 className="font-semibold text-lg">{exp.title}</h4>
+                <p className="text-sm text-gray-600 mt-1">{exp.summary}</p>
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="text-xs text-gray-500">Durasi: {exp.duration} • Kapasitas: {exp.capacity}</div>
+                  <div className="flex gap-2">
+                    <button onClick={() => setSelected(exp)} className="px-3 py-1 text-sm border rounded">Detil</button>
+                    <button onClick={() => setSelected(exp)} className="px-3 py-1 text-sm bg-indigo-600 text-white rounded">Booking</button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {isAdmin && (
+          <section className="mt-8 bg-white p-4 rounded shadow-sm">
+            <h3 className="font-semibold text-lg">Admin — Tambah Praktikum</h3>
+            <AdminForm onAdd={addExperiment} />
+            <div className="mt-4">
+              <h4 className="text-sm font-semibold">Eksperimen Tersimpan</h4>
+              <ul className="mt-2 text-sm space-y-2">
+                {experiments.map(e => (
+                  <li key={e.id} className="p-2 bg-gray-50 rounded">{e.title} • {e.duration} • {e.capacity} peserta</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        <section id="contact" className="mt-8">
+          <h3 className="text-xl font-semibold">Kontak & Lokasi</h3>
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-4 rounded shadow-sm">
+              <p className="text-sm">Laboratorium Fisika — Gedung X, Kampus Y</p>
+              <p className="text-sm mt-2">Email: lab@example.edu</p>
+              <p className="text-sm">Telepon: (021) 555-1234</p>
+            </div>
+            <div className="bg-white p-4 rounded shadow-sm">
+              <h4 className="font-semibold">Form Pertanyaan</h4>
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-8">
+          <h3 className="text-xl font-semibold">Semua Booking</h3>
+          <div className="mt-3 bg-white p-4 rounded shadow-sm">
+            <BookingTable bookings={bookings} experiments={experiments} onDelete={(id)=> setBookings(b=> b.filter(x=>x.id!==id))} />
+          </div>
+        </section>
+      </main>
+
+      {/* Detail / Booking Modal */}
+      {selected && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-2xl bg-white rounded shadow-lg p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-bold text-xl">{selected.title}</h3>
+                <p className="text-sm text-gray-600 mt-1">{selected.summary}</p>
+              </div>
+              <button className="text-sm text-gray-500" onClick={()=> setSelected(null)}>Tutup</button>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold">Peralatan</h4>
+                <ul className="mt-2 text-sm list-disc pl-5">
+                  {selected.equipment.map((eq,i)=>(<li key={i}>{eq}</li>))}
+                </ul>
+                <p className="mt-3 text-sm text-gray-500">Durasi: {selected.duration} • Kapasitas: {selected.capacity}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold">Pesan Slot</h4>
+                <BookingForm exp={selected} onBook={addBooking} onClose={()=> setSelected(null)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <footer className="mt-12 border-t bg-white py-6">
+        <div className="max-w-5xl mx-auto px-4 text-sm text-gray-500">© {new Date().getFullYear()} Web Laboratorium — Starter template</div>
+      </footer>
+    </div>
+  );
+}
+
+function AdminForm({ onAdd }) {
+  const [form, setForm] = useState({ title: "", summary: "", duration: "1 jam", capacity: 4, equipment: "" });
+  return (
+    <form className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3" onSubmit={(e)=>{e.preventDefault(); onAdd(form); setForm({title:'',summary:'',duration:'1 jam',capacity:4,equipment:''})}}>
+      <input placeholder="Judul" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} className="p-2 border rounded" required />
+      <input placeholder="Ringkasan" value={form.summary} onChange={e=>setForm({...form,summary:e.target.value})} className="p-2 border rounded" required />
+      <input placeholder="Durasi" value={form.duration} onChange={e=>setForm({...form,duration:e.target.value})} className="p-2 border rounded" />
+      <input placeholder="Kapasitas" type="number" value={form.capacity} onChange={e=>setForm({...form,capacity:e.target.value})} className="p-2 border rounded" />
+      <input placeholder="Peralatan (pisahkan koma)" value={form.equipment} onChange={e=>setForm({...form,equipment:e.target.value})} className="p-2 border rounded md:col-span-2" />
+      <div className="md:col-span-2 text-right">
+        <button className="px-4 py-2 bg-green-600 text-white rounded">Tambah Praktikum</button>
+      </div>
+    </form>
+  );
+}
+
+function BookingForm({ exp, onBook, onClose }) {
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [slot, setSlot] = useState("09:00-11:00");
+  const [notes, setNotes] = useState("");
+
+  return (
+    <form onSubmit={(e)=>{ e.preventDefault(); onBook(exp.id, name, date, slot, notes); onClose(); }} className="space-y-2">
+      <input required value={name} onChange={e=>setName(e.target.value)} placeholder="Nama" className="p-2 border rounded w-full" />
+      <input required type="date" value={date} onChange={e=>setDate(e.target.value)} className="p-2 border rounded w-full" />
+      <select value={slot} onChange={e=>setSlot(e.target.value)} className="p-2 border rounded w-full">
+        <option>09:00-11:00</option>
+        <option>11:30-13:30</option>
+        <option>14:00-16:00</option>
+      </select>
+      <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Catatan" className="p-2 border rounded w-full" rows={3} />
+      <div className="flex gap-2 justify-end">
+        <button type="button" onClick={onClose} className="px-3 py-1 border rounded">Batal</button>
+        <button type="submit" className="px-3 py-1 bg-indigo-600 text-white rounded">Pesan</button>
+      </div>
+    </form>
+  );
+}
+
+function ContactForm(){
+  const [q,setQ] = useState('');
+  function send(){
+    alert('Pertanyaan tersimpan (local). Implementasikan endpoint email pada backend untuk produksi.');
+    setQ('');
+  }
+  return (
+    <div>
+      <textarea value={q} onChange={e=>setQ(e.target.value)} placeholder="Tulis pertanyaan Anda..." className="w-full p-2 border rounded" rows={4}></textarea>
+      <div className="mt-2 text-right">
+        <button onClick={send} className="px-3 py-1 bg-indigo-600 text-white rounded">Kirim</button>
+      </div>
+    </div>
+  );
+}
+
+function BookingTable({ bookings, experiments, onDelete }){
+  function getExpTitle(id){
+    return experiments.find(e=>e.id===id)?.title || '—';
+  }
+  return (
+    <div className="overflow-auto">
+      <table className="w-full text-sm">
+        <thead className="text-left text-gray-500">
+          <tr>
+            <th className="py-2">Nama</th>
+            <th>Praktikum</th>
+            <th>Tanggal</th>
+            <th>Slot</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map(b=> (
+            <tr key={b.id} className="border-t">
+              <td className="py-2">{b.name}</td>
+              <td>{getExpTitle(b.expId)}</td>
+              <td>{b.date}</td>
+              <td>{b.slot}</td>
+              <td><button onClick={()=>onDelete(b.id)} className="px-2 py-1 border rounded text-xs">Hapus</button></td>
+            </tr>
+          ))}
+          {bookings.length===0 && (
+            <tr><td colSpan={5} className="py-4 text-center text-gray-400">Belum ada booking</td></tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
