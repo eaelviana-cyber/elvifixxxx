@@ -1,0 +1,14 @@
+ import matplotlib.pyplot as plt
+ import pandas as pd
+ data = {
+ ’Model’: [’Layout:XLA:Random’, ’Layout:NLP:Default’, ’Tile:XLA’],
+ ’Top-1␣Error␣(%)’: [10.9, 4.0, 9.1],
+ ’Top-3␣Error␣(%)’: [1.6, 0.13, 2.8]
+ }
+ df = pd.DataFrame(data)
+ plt.figure(figsize=(8,5))
+ plt.bar(df[’Model’], df[’Top-1␣Error␣(%)’], color=’skyblue’, label=’Top-1␣Error’)
+ plt.bar(df[’Model’], df[’Top-3␣Error␣(%)’], color=’salmon’, alpha=0.6, label=’Top-3␣Error’)
+ plt.ylabel(’Error␣(%)’)
+ plt.title(’Perbandingan␣Top-K␣Error␣pada␣Dataset␣TPUGraphs’)
+ plt.legend()
